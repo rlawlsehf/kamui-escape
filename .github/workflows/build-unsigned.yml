@@ -13,10 +13,8 @@ jobs:
 
       - name: Run build.sh
         run: |
-          # SDK 경로 설정 및 빌드 스크립트 실행
           export SDK="$(xcrun --sdk iphoneos --show-sdk-path)"
           echo "Using SDK: $SDK"
-          
           chmod +x build.sh
           ./build.sh
 
@@ -25,4 +23,5 @@ jobs:
         with:
           name: unsigned-ipa
           path: build/*.ipa
+
 
