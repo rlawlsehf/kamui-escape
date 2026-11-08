@@ -11,32 +11,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup iOS SDK & Build
+      - name: Run build.sh
         run: |
-          # GitHub Actions의 macOS 최신 러너에 설치된 기본 Xcode SDK 경로 지정
+          # SDK 경로 설정 및 빌드 스크립트 실행
           export SDK="$(xcrun --sdk iphoneos --show-sdk-path)"
           echo "Using SDK: $SDK"
           
-          # build.sh 실행 권한 부여 및 실행
           chmod +x build.sh
           ./build.sh
-
-      - name: Verify and Locate IPA
-        run: |
-          # build 폴더 내 생성된 IPA 파일을 release 폴더로 이동 및 이름 정리
-          mkdir -p release
-          IPA_PATH=$(find build -name "*.ipa" | head -n 1)
-          
-          if [ -n "$IPA_PATH" ]; then
-            cp "$IPA_PATH" release/kamui-escape-unsigned.ipa
-            echo "Successfully packed IPA at release/kamui-escape-unsigned.ipa"
-          else
-            echo "Error: IPA was not generated."
-            exit 1
-          fi
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-ipa
-          path: release/*.ipa
+          path: build/*.ipa
+
