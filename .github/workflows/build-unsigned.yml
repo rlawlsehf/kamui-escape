@@ -1,7 +1,7 @@
 name: Build Unsigned IPA
 
 on:
-  workflow_dispatch: # 수동 빌드 버튼 활성화
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,13 +14,10 @@ jobs:
       - name: Build with build.sh
         run: |
           chmod +x build.sh
-          # 서명 없이 빌드 수행
           ./build.sh CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
-      - name: Package Unsigned IPA (If build.sh didn't create IPA)
+      - name: Package Unsigned IPA
         run: |
-          # build.sh 실행 후 release 폴더에 ipa가 이미 존재하면 패스, 
-          # .app만 생성된 경우 IPA 구조로 강제 압축
           mkdir -p release
           APP_PATH=$(find build -name "*.app" 2>/dev/null | head -n 1)
           if [ -d "$APP_PATH" ] && [ ! -f release/*.ipa ]; then
@@ -34,3 +31,5 @@ jobs:
         with:
           name: unsigned-ipa
           path: release/*.ipa
+
+        
