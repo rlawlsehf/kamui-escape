@@ -23,5 +23,3 @@ jobs:
         with:
           name: unsigned-ipa
           path: build/*.ipa
-
-
